@@ -71,92 +71,86 @@ def score_food(product):
         score+=4
     return score
 
-if __name__ == "__main__":
-    pdf_path =( r"C:\Imp stuff\Nestle_Catalogue_web.pdf")
-    text_content = extract_text_from_pdf(pdf_path)
-    final_txt=convert_txt(text_content)
 
-   
-    
-    json_file_path =(r"C:\Imp stuff\Nestle_Catalogue_web.json")
-    data = load_json(json_file_path)
-    
-    with open(json_file_path, "w") as json_file:
-        json.dump(final_txt, json_file, indent=2)
-    
-    print(f"Data extracted and saved to '{json_file_path}'.")
 
-    '''for i in range(len(final_txt)):
-        print(final_txt[i])
-        if i%3==0:
-            print('\t')'''
-    
+def extract_product_info(data, category_keywords):
+    products = []
+    current_product = None
 
-data = [
-    "Product Catalogue",
-    "2024Nestl\u00e9 KITKAT Smooth",
-    "Hazelnut 45g",
-    "Units per outer 40",
+    for item in data:
+        if item.startswith("2024"):
+            if current_product:
+                products.append(current_product)
+            current_product = {"category":"","name": item, "description": "", "price": ""}
+        elif item.startswith("Nestl\u00e9"):
+            current_product["category"] = "food"
+        elif item.startswith("RRP"):
+            match = re.search(r'\d+', item)
+            if match:
+                current_product["price"] = match.group()
+        else:
+            if current_product:
+                current_product["description"] += item + " "
+
+    if current_product:
+        products.append(current_product)
+
+    return products
+
+def print_product_info(product, category):
+    if product:
+        product_score = calculate_score(product, category)
+        print(f"Product: {product['name']}, Category: {category}, Score: {product_score}")
+
+def calculate_score(product, category):
+    score = common_attributes_score(product)
+
+    if category == "medicine":
+        score += score_medicine(product)
+    elif category == "office supplies":
+        score += score_office_supplies(product)
+    elif category == "home decor":
+        score += score_home_decor(product)
+    elif category == "food":
+        score += score_food(product)
+
+    return score
+
+def detect_category(final_txt):
+    for item in final_txt:
+        if any(keyword in item for keyword in ["Medicine", "Tablets", "Prescription"]):
+            return "medicine"
+        elif any(keyword in item for keyword in ["Office Supplies", "Stationery", "Notebook"]):
+            return "office supplies"
+        elif any(keyword in item for keyword in ["Decor", "Furniture", "Home"]):
+            return "home decor"
+        elif any(keyword in item for keyword in ["Product Catalogue","2024Nestl\u00e9 KITKAT Smooth","Hazelnut 45g","Units per outer 40",
     "RRP 220",
     "Nestl\u00e9 KITKAT 4 Finger 45g",
     "Units per outer 48",
     "RRP 220",
     # ... (the rest of your data)
-    "Top Ranking Nestl\u00e9 Product"
-]
-
-# Initialize a list to store dictionaries of product information
-products = []
-current_product = None
-
-# Iterate through the data
-for item in data:
-    # Check if the item starts with "2024" to identify the start of a new product
-    if item.startswith("2024"):
-        # Save the previous product information if available
-        if current_product:
-            products.append(current_product)
-        
-        # Initialize a new product dictionary
-        current_product = {"category":"","name": item, "description": "", "price": "", "units_per_outer": ""}
+    "Top Ranking Nestl\u00e9 Product"]):
+            return "food"
     
-    # Check if the item starts with "Units per outer" to get additional information
-    elif item.startswith("Units per outer"):
-        current_product["units_per_outer"] = re.search(r'\d+', item).group()
+    return None
 
-    #category  (abhi sirf dekhne ke liye daal rha hu)- Shivain
-    elif item.startswith("Nestl\u00e9"):
-        current_product["category"] = "Food"
-    # Check if the item starts with "RRP" to get the price
-    elif item.startswith("RRP"):
-        current_product["price"] = re.search(r'\d+', item).group()
+def process_category(pdf_path, json_path):
+    text_content = extract_text_from_pdf(pdf_path)
+    final_txt = convert_txt(text_content)
+    data = load_json(json_path)
+    category = detect_category(final_txt)
 
-    # If none of the conditions match, consider it as a description
+    if category:
+        products = extract_product_info(data, [])
+        for product in products:
+            product["category"] = category
+            print_product_info(product, category)
     else:
-        if current_product:
-            current_product["description"] += item + " "
+        print("Could not detect the category.")
 
-# Append the last product to the products list
-if current_product:
-    products.append(current_product)
+if __name__ == "__main__":
+    pdf_path = r"C:\Imp stuff\Nestle_Catalogue_web.pdf"
+    json_file_path = r"C:\Imp stuff\Nestle_Catalogue_web.json"
 
-# Display the extracted information
-for product in products:
-    print(product)
-    for product in products:
-        if product:
-            if "category" in product:
-                category = product["category"].lower()
-                if category == "medicine":
-                    product_score = score_medicine(product)
-                elif category == "office supplies":
-                    product_score = score_office_supplies(product)
-                elif category == "home decor":
-                    product_score = score_home_decor(product)
-                elif category == "food":
-                    product_score = score_food(product)
-                else:
-                    # Default case for unknown categories
-                    product_score = common_attributes_score(product)
-                
-                print(f"Product: {product['name']}, Category: {category}, Score: {product_score}")
+    process_category(pdf_path, json_file_path)
