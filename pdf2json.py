@@ -2,6 +2,7 @@ import pdfplumber
 import json
 import string
 import re
+import os
 # Convert pdf to string
 def extract_text_from_pdf(pdf_path):
     with pdfplumber.open(pdf_path) as pdf:
@@ -152,5 +153,12 @@ def process_category(pdf_path, json_path):
 if __name__ == "__main__":
     pdf_path = r"C:\Imp stuff\Nestle_Catalogue_web.pdf"
     json_file_path = r"C:\Imp stuff\Nestle_Catalogue_web.json"
-
-    process_category(pdf_path, json_file_path)
+    if not os.path.exists(json_file_path):
+        text_content = extract_text_from_pdf(pdf_path)
+        final_txt = convert_txt(text_content)
+        with open(json_file_path, "w") as json_file:
+            json.dump(final_txt, json_file, indent=2)
+        print(f"Data extracted and saved to '{json_file_path}'.")
+        process_category(pdf_path,json_file_path)
+    else:
+        process_category(pdf_path, json_file_path)
