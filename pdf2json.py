@@ -66,12 +66,30 @@ def score_home_decor(product):
         score += 4
     
     return score
+
 def score_food(product):
     score = common_attributes_score(product)
     if "category" in product and product["category"].lower() =="food":
         score+=4
     return score
 
+def score_tool(product):
+    score = common_attributes_score(product)
+    if "category" in product and product["category"].lower() =="tool":
+        score+=4
+    return score
+
+def score_jewellery(product):
+    score = common_attributes_score(product)
+    if "category" in product and product["category"].lower() =="jewellery":
+        score+=4
+    return score
+
+def score_book(product):
+    score = common_attributes_score(product)
+    if "category" in product and product["category"].lower() =="book":
+        score+=4
+    return score
 
 
 def extract_product_info(data, category_keywords):
@@ -114,6 +132,12 @@ def calculate_score(product, category):
         score += score_home_decor(product)
     elif category == "food":
         score += score_food(product)
+    elif category == "tool":
+        score += score_tool(product)
+    elif category == "jewellery":
+        score += score_jewellery(product)
+    elif category == "book":
+        score += score_book(product)
 
     return score
 
@@ -151,8 +175,8 @@ def process_category(pdf_path, json_path):
         print("Could not detect the category.")
 
 if __name__ == "__main__":
-    pdf_path = r"C:\Imp stuff\Nestle_Catalogue_web.pdf"
-    json_file_path = r"C:\Imp stuff\Nestle_Catalogue_web.json"
+    pdf_path = r"../Nestle_Catalogue_web.pdf"
+    json_file_path = r"../Nestle_Catalogue_web.json"
     if not os.path.exists(json_file_path):
         text_content = extract_text_from_pdf(pdf_path)
         final_txt = convert_txt(text_content)
