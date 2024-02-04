@@ -149,13 +149,19 @@ def detect_category(final_txt):
             return "office supplies"
         elif any(keyword in item for keyword in ["Decor", "Furniture", "Home"]):
             return "home decor"
-        elif any(keyword in item for keyword in ["Product Catalogue","2024Nestl\u00e9 KITKAT Smooth","Hazelnut 45g","Units per outer 40",
-    "RRP 220",
-    "Nestl\u00e9 KITKAT 4 Finger 45g",
-    "Units per outer 48",
-    "RRP 220",
-    # ... (the rest of your data)
-    "Top Ranking Nestl\u00e9 Product"]):
+        elif any(keyword in item for keyword in [ "Chocolate", "Candy", "Chips", "Cookies", "Biscuits", "Nuts", "Popcorn", "Crackers",
+    "Pretzels", "Gummies", "Snack Bars", "Granola Bars", "Vanilla", "Strawberry", "Caramel",
+    "BBQ", "Sour", "Spicy", "Honey", "Salted", "Sweet", "Salty", "Cheese", "Units", "Weight",
+    "Packaging", "Box", "Bag", "Pouch", "Multi-pack", "RRP", "Discounts", "Special Offers",
+    "Price per unit", "Brand", "Brand names", "Product lines", "Dietary", "Gluten-free", "Vegan",
+    "Limited edition", "Top-selling", "Recommended", "Edition", "Promotion", "Limited-time",
+    "Flavor", "Crunchy", "Chewy", "Savory", "Sweetened", "Organic", "Natural", "Fresh", "Unique",
+    "Exotic", "Artisan", "Classic", "Traditional", "Rich", "Premium", "Authentic", "Homemade",
+    "Family recipe", "Irresistible", "Indulgent", "Delight", "Zesty", "Tangy", "Tasty", "Delicious",
+    "Gourmet", "Wholesome", "Nutritious", "Refreshing", "Crispy", "Luscious", "Juicy", "Zingy",
+    "Mouthwatering", "Satisfying", "Yummy", "Tempting", "Flavorful", "Robust", "Sizzling",
+    "Tantalizing", "Scrumptious", "Hearty", "Spiced", "Crave", "Zippy", "Divine", "Velvety",
+    "Piquant", "Peppery", "Chewy", "Munchable", "Nourishing"]):
             return "food"
     
     return None
