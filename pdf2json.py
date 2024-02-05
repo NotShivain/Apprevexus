@@ -30,7 +30,7 @@ def load_json(json_path):
     return data
 
 
-        
+#Define scoring criteria
 def common_attributes_score(product):
     score = 0
 
