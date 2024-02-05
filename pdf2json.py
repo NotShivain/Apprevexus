@@ -30,7 +30,7 @@ def load_json(json_path):
     return data
 
 
-        
+#Define scoring criteria
 def common_attributes_score(product):
     score = 0
 
@@ -90,6 +90,45 @@ def score_book(product):
     if "category" in product and product["category"].lower() =="book":
         score+=4
     return score
+def score_electronics(product):
+    score=common_attributes_score(product)
+    if "Power Consumption" in product["desription"]:
+        score+=3
+    if "Display Size" in product["description"]:
+        score+=2
+    if "Operating System" in product["description"]:
+        score+=3
+    if "Warranty" in product["description"]:
+        score+=3
+    if "Certificatoins" in product["description"]:
+        score+=2
+    return score
+def score_cosmetics(product):
+    score = common_attributes_score(product)
+    if "Ingredients" in product["description"]:
+        score += 3
+    if "Type" in product["description"]:
+        score += 2
+    if "Usage" in product["description"]:
+        score += 2
+    if "Skin Type" in product["description"]:
+        score += 2
+    if "Expiry Date" in product["description"]:
+        score += 3
+    return score
+def score_sports(product):
+    score = common_attributes_score(product)
+    if "Sport Type" in product["description"]:
+        score += 3
+    if "Durability" in product["description"]:
+        score += 2
+    if "Size" in product["description"]:
+        score += 2
+    if "Weight" in product["description"]:
+        score += 2
+    if "Material" in product["description"]:
+        score += 3
+    return score
 
 
 def extract_product_info(data, category_keywords):
@@ -138,6 +177,12 @@ def calculate_score(product, category):
         score += score_jewellery(product)
     elif category == "book":
         score += score_book(product)
+    elif category=="electronics":
+        score+=score_electronics(product)
+    elif category=="cosmetics":
+        score+=score_cosmetics(product)
+    elif category=="sports":
+        score+=score_sports(product)
 
     return score
 
@@ -222,6 +267,72 @@ def detect_category(final_txt):
             "book collecting", "book donation", "book donation drive", "book subscription", "book swap",
             "book synopsis"]):
             return "book"
+        elif any(keyword in item for keyword in ["Electricals", "Electronics", "Mobile", "Smartphone", "Gadget","DSLR",
+             "Mirrorless", "Camcorder", "Photography", "Lens", "Tripod", 
+            "Camera", "Memory Card", "Gaming Console", "PC", 
+            "Gaming Laptop", "Monitor","Keyboard", "Gaming Mouse", "Headset", "Gaming Chair", "Desk", 
+            "Gaming Controller", "iPhone", "Android", "Samsung Galaxy", "Smartphone Accessories", "Mobile Phones", 
+            "Television", "Smart TV", "LED TV", "OLED TV", "QLED TV", "4K TV", "8K TV", "TV Stand", 
+            "TV Wall Mount", "TV Accessories", "Video Camera", "Action Camera", "Camcorder", 
+            "Video Editing Software", "Video Production", "Video Accessories", "Smartwatch", 
+            "Fitness Tracker", "Activity Tracker", "Smart Glasses", "Wearable Technology", "Wearable Accessories", 
+            "Over-Ear Headphones", "On-Ear Headphones", "In-Ear Headphones", "Wireless Headphones", 
+            "Noise-Canceling Headphones", "Earbuds", "Headphone Amplifier", "Headphone Case", "Desktop PC", 
+            "All-in-One PC", "Workstation", "Mini PC", "PC Accessories", "PC Components", "PC Peripherals", "iPad", 
+            "Android Tablet", "Windows Tablet", "Tablet Accessories", "Tablet Stands", "Tablet Cases", "Amazon Echo", 
+            "Amazon Kindle", "Amazon Fire Tablet", "Amazon Fire TV", "Amazon Echo Accessories", "DVD Player", "DVD Recorder", 
+            "Portable DVD Player", "DVD Movies", "DVD Storage", "Laptops", "Ultrabooks", "Chromebooks", "2-in-1 Laptops", "Laptop Accessories", 
+            "Laptop Bags", "Nintendo Switch", "Switch Controllers", "Switch Games", "Switch Dock", "Switch Case", "Switch Screen Protector", 
+            "Projector", "Home Theater Projector", "Mini Projector", "4K Projector", "Projector Screen"]):
+            return "electronics"
+        elif any(keyword in item for keyword in ["Cosmetics", "Beauty", "Makeup", "Skincare", "Perfume", "Lipstick","Foundation", "Eyeshadow", "Mascara", "Eyeliner", "Blush", "Bronzer", 
+            "Highlighter", "Concealer", "Primer", "Setting Spray", "Setting Powder", 
+            "BB Cream", "CC Cream", "Tinted Moisturizer", "Lip Gloss", "Lip Liner", 
+            "Lip Balm", "Lip Stain", "Lip Plumper", "Lip Scrub", "Eyebrow Pencil", 
+            "Eyebrow Gel", "Eyebrow Powder", "Eyebrow Pomade", "Eyebrow Tint", 
+            "Eyelash Curler", "False Eyelashes", "Eyelash Glue", "Makeup Brushes", 
+            "Makeup Sponges", "Makeup Remover", "Face Wash", "Cleanser", "Toner", 
+            "Serum", "Moisturizer", "Face Oil", "Face Mask", "Sheet Mask", "Eye Cream", 
+            "Night Cream", "Day Cream", "Sunscreen", "Body Lotion", "Body Butter", 
+            "Body Oil", "Body Wash", "Shampoo", "Conditioner", "Hair Mask", "Hair Oil", 
+            "Hair Serum", "Dry Shampoo", "Hair Spray", "Hair Gel", "Hair Wax", 
+            "Hair Mousse", "Hair Styling Cream", "Nail Polish", "Nail Polish Remover", 
+            "Nail Strengthener", "Nail Growth Serum", "Nail Care Kit", "Cuticle Oil", 
+            "Cuticle Cream", "Nail File", "Nail Buffer", "Nail Clippers", 
+            "Nail Scissors", "Nail Art Kit", "Nail Stickers", "Nail Decals", 
+            "Nail Gems", "Nail Brushes", "Nail Drying Spray", "Nail Dryer", 
+            "Nail UV Lamp", "Nail Top Coat", "Nail Base Coat", "Nail Hardener", 
+            "Nail Wraps", "Nail Dip Powder", "Nail Extension Kit", "Nail Tips", 
+            "Nail Glue", "Nail Acetone", "Nail Fungus Treatment", 
+            "Nail Antibacterial Solution", "Nail Dehydrator", "Nail Cleanser"]):
+            return "cosmetics"
+        elif any(keyword in item for keyword in ["Sports", "Fitness", "Athletics", "Exercise", "Workout", "Sportswear", "Equipment", "Gym","Sports", "Fitness", "Athletics", "Exercise", "Workout", "Sportswear", 
+            "Equipment", "Gym", "Running", "Cycling", "Swimming", "Yoga", "Pilates", 
+            "CrossFit", "Weightlifting", "Cardio", "Strength Training", "Endurance", 
+            "Training", "Training Shoes", "Running Shoes", "Sports Shoes", 
+            "Athletic Shoes", "Exercise Mat", "Yoga Mat", "Resistance Bands", 
+            "Jump Rope", "Dumbbells", "Kettlebells", "Barbells", "Weight Plates", 
+            "Treadmill", "Exercise Bike", "Elliptical Trainer", "Rowing Machine", 
+            "Fitness Tracker", "Fitness Watch", "Heart Rate Monitor", 
+            "Activity Tracker", "Sports Bra", "Athletic Wear", "Compression Clothing", 
+            "Moisture-Wicking Apparel", "Sports Shorts", "Athletic Pants", 
+            "Sports Tops", "Athletic Jackets", "Sports Socks", "Sports Accessories", 
+            "Water Bottle", "Sports Bag", "Gym Bag", "Fitness Gloves", "Gym Towel", 
+            "Sports Sunglasses", "Sports Hat", "Headbands", "Wristbands", 
+            "Compression Sleeves", "Sports Tape", "Muscle Rub", "Sports Nutrition", 
+            "Protein Powder", "Pre-Workout Supplement", "Post-Workout Supplement", 
+            "Energy Bars", "Sports Drinks", "Electrolyte Replenishment", 
+            "Hydration Packs", "Foam Roller", "Massage Ball", "Massage Stick", 
+            "Sports Medicine", "First Aid Kit", "Injury Support", 
+            "Recovery Accessories", "Fitness Technology", "Smart Fitness Equipment", 
+            "Fitness Apps", "Training Programs", "Online Coaching", 
+            "Sports Performance Analysis", "Fitness Community", "Athlete Training", 
+            "Sports Psychology", "Mindfulness Training", "Motivational Tools", 
+            "Sports Recovery", "Rest and Recovery", "Sleep Optimization", 
+            "Stretching Routine", "Hydrotherapy", "Cryotherapy", "Massage Therapy", 
+            "Heat Therapy", "Cold Therapy", "Compression Therapy", "Float Tanks", 
+            "Sauna", "Steam Room"]):
+            return "sports"
     
     return None
 
