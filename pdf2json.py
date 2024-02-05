@@ -129,6 +129,43 @@ def score_sports(product):
     if "Material" in product["description"]:
         score += 3
     return score
+def score_grocery(product):
+    score = common_attributes_score(product)
+    if "Weight" in product["description"]:
+        score +=3
+    if "Price" in product["description"]:
+        score +=2
+    if "Expiry Date" in product["description"]:
+        score +=2
+    if "Packaging" in product["description"]:
+        score +=2
+    return score
+def  score_apparel(product):
+    score = common_attributes_score(product)
+    if "Size" in product["description"]:
+        score +=3
+    if "Color" in product["description"]:
+        score +=2
+    if "Material" in product["description"]:
+        score +=2
+    if "Price" in product["description"]:
+        score +=2
+    if  "Care Instructions" in product["description"]:
+        score +=2
+    return score 
+def score_appliances(product):
+    score =common_attributes_score(product)
+    if "Category" in product["description"]:
+        score +=3
+    if "Model Number" in product["description"]:
+        score +=2
+    if "Power Consumption" in product["description"]:
+        score +=2
+    if "Warranty" in product["description"]:
+        score +=2
+    if "User Manual" in product["description"]:
+        score +=3
+    return score
 
 
 def extract_product_info(data, category_keywords):
@@ -183,6 +220,13 @@ def calculate_score(product, category):
         score+=score_cosmetics(product)
     elif category=="sports":
         score+=score_sports(product)
+    elif category=="grocery":
+        score += score_grocery(product)
+    elif category=="apparels":
+        score+= score_apparel(product)
+    elif category=="appliances":
+        score+=score_appliances(product)
+
 
     return score
 
@@ -333,8 +377,91 @@ def detect_category(final_txt):
             "Heat Therapy", "Cold Therapy", "Compression Therapy", "Float Tanks", 
             "Sauna", "Steam Room"]):
             return "sports"
-    
-    return None
+        elif any(keyword in item for keyword in ["grocery", "Fruits", "Vegetables", "Lean Protein", "Chicken", "Fish", "Tofu",
+                        "Whole Grains", "Nuts", "Seeds", "Dairy", "Dairy Alternatives", "Water", "Sports Drinks",
+            "Healthy Snacks", "Nuts", "Greek Yogurt", "Trail Mix", "Fresh Herbs",
+            "Cooking Oils", "Olive Oil", "Avocado Oil", "Eggs", "Quinoa",
+            "Sweet Potatoes", "Leafy Greens", "Berries", "Bananas", "Whole Wheat Bread", "Brown Rice",
+            "Milk", "Eggs", "Chicken Breast", "Salmon", "Quinoa", "Spinach",
+            "Broccoli", "Blueberries", "Bananas", "Greek Yogurt", "Almonds", "Whole Wheat Pasta",
+            "Avocado", "Tomatoes", "Sweet Potatoes", "Oranges", "Green Beans", "Brown Rice",
+            "Olive Oil", "Cottage Cheese", "Whole Grain Bread", "Salad Greens", "Romaine Lettuce", "Red Leaf Lettuce", "Iceberg Lettuce", "Arugula", 
+            "Radicchio", "Endive", "Spring Mix", "Cabbage", "Cranberry Sauce", "Pumpkin Puree", "Peaches", "Plums", "Cherries", "Bok Choy", "Snow Peas", 
+            "Snap Peas", "Parsnips", "Turnips", "Rutabaga", "Watercress", "Capers", "Shallots", "Scallions", "Jicama", "Squash", "Cottage Cheese", "Blue Cheese",
+            "Feta Cheese", "Gouda Cheese", "Cottage Cheese", "Ricotta Cheese", "Sour Cream", "Heavy Cream", "Coconut Cream", "Yeast", "Molasses", "Sesame Oil", "Rice Noodles",
+            "Vermicelli", "Soy Milk", "Cottage Cheese", "Pumpkin Seeds", "Sunflower Seeds", "Sesame Seeds", "Popcorn Kernels", "Brown Sugar", "Powdered Sugar", "Coconut Flour", 
+            "Almond Flour", "Flaxseed Meal", "Chickpea Pasta", "Whole Wheat Couscous", "Raisins", "Dates", "Walnuts", "Cashews", "Pecans", "Pumpkin Seeds", "Sunflower Oil", "Coconut Oil",
+            "Flour", "Baking Powder", "Baking Soda", "Vanilla Extract", "Cinnamon", "Nutmeg", "Paprika", "Cumin", "Curry Powder", "Dijon Mustard", "Kale", "Zucchini", "Asparagus", "Eggplant", 
+            "Radishes", "Beets", "Brussels Sprouts", "Cauliflower", "Artichokes", "Cilantro", "Parsley", "Thyme", "Rosemary", "Sage", "Basil", "Cocoa Powder", "Chickpea Flour", "Rice Vinegar", 
+            "Apple Cider Vinegar", "Hot Sauce", "Whole Wheat English Muffins", "Cranberries", "Mangoes", "Kiwi", "Pears", "Pomegranates", "Tahini", "Provolone Cheese", "Parmesan Cheese", "Whole Wheat Bagels",
+            "Shrimp", "Tilapia", "Tofu", "Tempeh", "Dark Leafy Greens", "Coconut Water", "Sparkling Water", "Whole Wheat Panko Breadcrumbs", "Whole Wheat Flour", "Honey", "Maple Syrup", "Peanut Butter", "Almond Butter", 
+            "Oats", "Whole Wheat Tortillas", "Hummus", "Black Beans", "Chickpeas", "Lentils", "Ground Turkey", "Lean Beef", "Pork", "Whole Wheat Crackers", "Quinoa Pasta", 
+            "Canned Tomatoes", "Cucumbers", "Carrots",
+             "Bell Peppers", "Onions", "Garlic"]):
+            return "grocery"
+        elif any(keyword in item for keyword in ["apparels","Anorak", "Parka", "Windbreaker", "Raincoat", "Puffer Jacket", "Denim Jacket", "Leather Jacket", "Bomber Jacket", 
+            "Vests", "Blazers", "Trench Coat", "Fur Coat", "Pea Coat", "Sweatpants", "Track Pants", "Cargo Pants", "Capris", 
+            "Joggers", "Tunic", "Blazer Dresses", "Shift Dresses", "Wrap Dresses", "Maxi Dresses", "Mini Dresses", 
+            "Midi Dresses", "Sheath Dresses", "A-Line Dresses", "Fit and Flare Dresses", "Sundresses", "Jeggings", 
+            "Culottes", "Palazzo Pants", "Turtlenecks", "Tank Tops", "Camisoles", "Crop Tops", "Bodysuits", "Graphic Tees", 
+            "Polo Shirts", "Henley Shirts", "Tunics", "Camisoles", "Kimono", "Shrugs", "Capes", "Ponchos", "Tuxedos", 
+            "Clogs", "Mules", "Slides", "Platform Shoes", "Ballet Flats", "Wedges", "Derby Shoes", "Monk Strap Shoes", 
+            "Chukka Boots", "Chelsea Boots", "Moccasins", "Snow Boots", "Rain Boots", "Wingtip Shoes", "Loafers", 
+            "Driving Shoes", "Boat Shoes", "Satchels", "Crossbody Bags", "Hobo Bags", "Bucket Bags", "Messenger Bags", 
+            "Satchels", "Totes", "Backpack Purses", "Duffel Bags", "Weekender Bags", "Wallets", "Clutches", "Berets", 
+            "Fedora Hats", "Panama Hats", "Newsboy Caps", "Trapper Hats", "Sun Hats", "Berets", "Bucket Hats", "Visors", 
+            "Beanies", "Sun Visors", "Turbans", "Fedoras", "Newsboy Caps", "Trapper Hats", "Sun Hats", "Trilby Hats", 
+            "Boater Hats", "Baseball Caps", "Cowboy Hats", "Bucket Hats", "Berets", "Bowler Hats", "Panama Hats", "Visors", 
+            "Fedoras", "Newsboy Caps", "Boater Hats", "Top Hats", "Beanies", "Cloche Hats", "Fascinators", "Derby Hats", 
+            "Safari Hats", "Brimmed Hats", "Bandanas", "Neckerchiefs", "Pocket Squares", "Ascots", "Ties", "Bow Ties", 
+            "Bolo Ties", "Cravats", "Scarves", "Mufflers", "Neck Warmers", "Shawls", "Stoles", "Snoods", "Gloves", "Mittens", 
+            "Fingerless Gloves", "Touchscreen Gloves", "Arm Warmers", "Leg Warmers", "Socks", "Stockings", "Tights", 
+            "Knee-High Socks", "Ankle Socks", "No-Show Socks", "Boot Socks", "Over-the-Knee Socks", "Thigh-High Socks", 
+            "Compression Socks", "Fishnet Stockings", "Opaque Tights", "Sheer Tights", "Patterned Tights", "Athletic Socks", 
+            "Running Socks", "Crew Socks", "Quarter Socks", "Dress Socks", "Hiking Socks", "Calf Sleeves", "Shoe Insoles", 
+            "Shoe Trees", "Boot Shapers", "Shoe Polish", "Shoe Cleaning Kits", "Shoe Horns", "Shoe Bags", "Shoe Racks", 
+            "Shoe Organizers", "Shoe Dryers", "Boot Brushes", "Shoe Shields", "Shoehorns", "Boot Jacks", "Shoe Stretchers", 
+            "Shoe Inserts", "Shoe Deodorizers", "Shoe Laces", "Shoe Repair Kits", "Shoe Polish", "Shoe Cleaning Brushes", 
+            "Shoe Storage Boxes", "Shoe Cabinets", "Shoe Benches", "Shoe Ottomans", "Shoe Cubbies", "Shoe Shelves", "Shoe Holders", 
+            "Shoe Racks", "Shoe Organizers", "Shoe Hangers", "Shoe Hooks", "Shoe Bags", "Shoe Totes", "Shoe Covers", "Shoe Protectors", 
+            "Shoe Shields", "Shoe Trees", "Shoe Horns", "Shoe Stretchers", "Shoe Inserts", "Shoe Insoles", "Shoe Liners","Shoe Pads"]):
+            return "apparels"
+        elif any(keyword in item for keyword in ["appliances",
+            "Electric Fan", "Ceiling Fan", "Air Fryer Oven", "Electric Can Opener", "Electric Kettle",
+            "Electric Blanket", "Electric Toothbrush Charger", "Handheld Vacuum", "Portable Heater", 
+            "Portable Air Conditioner", "Food Chopper", "Electric Grater", "Soda Maker", "Egg Cooker", 
+            "Crock-Pot", "Portable Induction Cooktop", "Electric Skillet", "Countertop Ice Maker", 
+            "Deep Fryer", "Electric Smoker", "Electric Wine Opener", "Hand Blender", "Electric Milk Frother", 
+            "Electric Peeler", "Electric Griddle", "Electric Food Warmer", "Electric Pasta Maker", 
+            "Electric Can Opener", "Electric Knife Sharpener", "Electric Salt and Pepper Grinder", 
+            "Electric Corkscrew", "Electric Jar Opener", "Electric Spiralizer", "Electric Wok", 
+            "Electric Crepe Maker", "Electric Popcorn Popper", "Electric Food Slicer", "Electric Bread Slicer", 
+            "Electric Tortilla Maker", "Electric Soup Maker", "Electric Meat Grinder", 
+            "Electric Quesadilla Maker", "Electric Fondue Pot", "Electric Food Dehydrator", 
+            "Electric Ice Cream Maker", "Electric Yogurt Maker", "Electric Pizzelle Maker", 
+            "Electric Egg Poacher", "Electric Sausage Stuffer", "Electric Potato Peeler", 
+            "Electric Cookie Press", "Electric Nut Grinder", "Electric Omelette Maker", 
+            "Electric Bacon Cooker", "Electric Donut Maker", "Electric Gravy Warmer", 
+            "Electric Hot Dog Cooker", "Electric Marshmallow Roaster", "Electric Pancake Maker", 
+            "Electric Rice Cooker", "Electric S'mores Maker", "Refrigerator", "Microwave", 
+            "Dishwasher", "Oven", "Stove", "Range Hood", "Blender", "Toaster", "Coffee Maker", 
+            "Food Processor", "Stand Mixer", "Juicer", "Slow Cooker", "Pressure Cooker", 
+            "Air Fryer", "Waffle Maker", "Rice Cooker", "Hand Mixer", "Kettle", 
+            "Espresso Machine", "Grill", "Electric Griddle", "Food Steamer", 
+            "Immersion Blender", "Can Opener", "Ice Cream Maker", "Bread Maker", 
+            "Vacuum Sealer", "Toaster Oven", "Deep Fryer", "Dehydrator", "Electric Knife", 
+            "Electric Skillet", "Sous Vide Precision Cooker", "Instant Pot", "Electric Grill", 
+            "Popcorn Maker", "Hot Plate", "Garbage Disposal", "Water Dispenser", 
+            "Wine Cooler", "Air Purifier", "Humidifier", "Air Conditioner", "Heater", 
+            "Dehumidifier", "Washing Machine", "Dryer", "Iron", "Steam Cleaner", 
+            "Vacuum Cleaner", "Dustbuster", "Robot Vacuum", "Hair Dryer", 
+            "Hair Straightener", "Curling Iron", "Electric Toothbrush", 
+            "Water Heater", "Garage Door Opener", "Smart Thermostat", 
+            "Security Camera", "Smart Doorbell", "Smart Lock", "Smart Lighting", 
+            "Smart Speaker", "Smart TV", "Smart Refrigerator", 
+            "Smart Washer and Dryer", "Smart Vacuum"]):
+            return"appliances"
+        return None
 
 def process_category(pdf_path, json_path):
     text_content = extract_text_from_pdf(pdf_path)
