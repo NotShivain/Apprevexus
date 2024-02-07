@@ -93,78 +93,78 @@ def score_book(product):
 def score_electronics(product):
     score=common_attributes_score(product)
     if "Power Consumption" in product["desription"]:
-        score+=3
+        score+=1
     if "Display Size" in product["description"]:
-        score+=2
+        score+=1
     if "Operating System" in product["description"]:
-        score+=3
+        score+=1
     if "Warranty" in product["description"]:
-        score+=3
+        score+=1
     if "Certificatoins" in product["description"]:
-        score+=2
+        score+=1
     return score
 def score_cosmetics(product):
     score = common_attributes_score(product)
     if "Ingredients" in product["description"]:
-        score += 3
+        score += 1
     if "Type" in product["description"]:
-        score += 2
+        score += 1
     if "Usage" in product["description"]:
-        score += 2
+        score += 1
     if "Skin Type" in product["description"]:
-        score += 2
+        score += 1
     if "Expiry Date" in product["description"]:
-        score += 3
+        score += 1
     return score
 def score_sports(product):
     score = common_attributes_score(product)
     if "Sport Type" in product["description"]:
-        score += 3
+        score += 1
     if "Durability" in product["description"]:
-        score += 2
+        score += 1
     if "Size" in product["description"]:
-        score += 2
+        score += 1
     if "Weight" in product["description"]:
-        score += 2
+        score += 1
     if "Material" in product["description"]:
-        score += 3
+        score += 1
     return score
 def score_grocery(product):
     score = common_attributes_score(product)
     if "Weight" in product["description"]:
-        score +=3
+        score +=1
     if "Price" in product["description"]:
-        score +=2
+        score +=1
     if "Expiry Date" in product["description"]:
-        score +=2
+        score +=1
     if "Packaging" in product["description"]:
-        score +=2
+        score +=1
     return score
 def  score_apparel(product):
     score = common_attributes_score(product)
     if "Size" in product["description"]:
-        score +=3
+        score +=1
     if "Color" in product["description"]:
-        score +=2
+        score +=1
     if "Material" in product["description"]:
-        score +=2
+        score +=1
     if "Price" in product["description"]:
-        score +=2
+        score +=1
     if  "Care Instructions" in product["description"]:
-        score +=2
+        score +=1
     return score 
 def score_appliances(product):
     score =common_attributes_score(product)
     if "Category" in product["description"]:
-        score +=3
+        score +=1
     if "Model Number" in product["description"]:
-        score +=2
+        score +=1
     if "Power Consumption" in product["description"]:
-        score +=2
+        score +=1
     if "Warranty" in product["description"]:
-        score +=2
+        score +=1
     if "User Manual" in product["description"]:
-        score +=3
+        score +=1
     return score
 
 
@@ -238,20 +238,6 @@ def detect_category(final_txt):
             return "office supplies"
         elif any(keyword in item for keyword in ["Decor", "Furniture", "Home"]):
             return "home decor"
-        elif any(keyword in item for keyword in [ "Chocolate", "Candy", "Chips", "Cookies", "Biscuits", "Nuts", "Popcorn", "Crackers",
-            "Pretzels", "Gummies", "Snack Bars", "Granola Bars", "Vanilla", "Strawberry", "Caramel",
-            "BBQ", "Sour", "Spicy", "Honey", "Salted", "Sweet", "Salty", "Cheese", "Units", "Weight",
-            "Packaging", "Box", "Bag", "Pouch", "Multi-pack", "RRP", "Discounts", "Special Offers",
-            "Price per unit", "Brand", "Brand names", "Product lines", "Dietary", "Gluten-free", "Vegan",
-            "Limited edition", "Top-selling", "Recommended", "Edition", "Promotion", "Limited-time",
-            "Flavor", "Crunchy", "Chewy", "Savory", "Sweetened", "Organic", "Natural", "Fresh", "Unique",
-            "Exotic", "Artisan", "Classic", "Traditional", "Rich", "Premium", "Authentic", "Homemade",
-            "Family recipe", "Irresistible", "Indulgent", "Delight", "Zesty", "Tangy", "Tasty", "Delicious",
-            "Gourmet", "Wholesome", "Nutritious", "Refreshing", "Crispy", "Luscious", "Juicy", "Zingy",
-            "Mouthwatering", "Satisfying", "Yummy", "Tempting", "Flavorful", "Robust", "Sizzling",
-            "Tantalizing", "Scrumptious", "Hearty", "Spiced", "Crave", "Zippy", "Divine", "Velvety",
-            "Piquant", "Peppery", "Chewy", "Munchable", "Nourishing"]):
-            return "food"
         elif any(keyword in item for keyword in ["screwdriver", "pliers", "wrench", "hammer", "tape measure", 
             "saw", "drill", "nut driver", "bolt cutter", "level", 
             "vise", "hacksaw", "chisel", "soldering iron", "multimeter", 
@@ -377,7 +363,7 @@ def detect_category(final_txt):
             "Heat Therapy", "Cold Therapy", "Compression Therapy", "Float Tanks", 
             "Sauna", "Steam Room"]):
             return "sports"
-        elif any(keyword in item for keyword in ["grocery", "Fruits", "Vegetables", "Lean Protein", "Chicken", "Fish", "Tofu",
+        elif any(keyword in item for keyword in ["Grocery", "Fruits", "Vegetables", "Lean Protein", "Chicken", "fish", "Tofu",
                         "Whole Grains", "Nuts", "Seeds", "Dairy", "Dairy Alternatives", "Water", "Sports Drinks",
             "Healthy Snacks", "Nuts", "Greek Yogurt", "Trail Mix", "Fresh Herbs",
             "Cooking Oils", "Olive Oil", "Avocado Oil", "Eggs", "Quinoa",
@@ -482,10 +468,13 @@ if __name__ == "__main__":
     json_file_path = r"../Nestle_Catalogue_web.json"
     if not os.path.exists(json_file_path):
         text_content = extract_text_from_pdf(pdf_path)
+        print("extract text")
         final_txt = convert_txt(text_content)
+        print("convert")
         with open(json_file_path, "w") as json_file:
             json.dump(final_txt, json_file, indent=2)
         print(f"Data extracted and saved to '{json_file_path}'.")
         process_category(pdf_path,json_file_path)
+
     else:
         process_category(pdf_path, json_file_path)
