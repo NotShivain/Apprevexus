@@ -3,6 +3,7 @@ import json
 import string
 import re
 import os
+import streamlit as st
 # Convert pdf to string
 def extract_text_from_pdf(pdf_path):
     with pdfplumber.open(pdf_path) as pdf:
@@ -10,6 +11,9 @@ def extract_text_from_pdf(pdf_path):
         for page in pdf.pages:
             text_content += page.extract_text()
     return text_content
+
+
+
 
 #Remove Punctutations
 def remove_punctuation(text_content):
@@ -453,7 +457,7 @@ def process_category(pdf_path, json_path):
     text_content = extract_text_from_pdf(pdf_path)
     final_txt = convert_txt(text_content)
     data = load_json(json_path)
-    category = detect_category(final_txt)
+    category = selected_category.lower
 
     if category:
         products = extract_product_info(data, [])
@@ -463,18 +467,40 @@ def process_category(pdf_path, json_path):
     else:
         print("Could not detect the category.")
 
-if __name__ == "__main__":
-    pdf_path = r"../Nestle_Catalogue_web.pdf"
-    json_file_path = r"../Nestle_Catalogue_web.json"
-    if not os.path.exists(json_file_path):
-        text_content = extract_text_from_pdf(pdf_path)
-        print("extract text")
-        final_txt = convert_txt(text_content)
-        print("convert")
-        with open(json_file_path, "w") as json_file:
-            json.dump(final_txt, json_file, indent=2)
-        print(f"Data extracted and saved to '{json_file_path}'.")
-        process_category(pdf_path,json_file_path)
+st.title("Catalogue Scoring App")
 
-    else:
-        process_category(pdf_path, json_file_path)
+    # Spinner for selecting categories
+selected_category = st.selectbox("Select Category", ["Electronics","Cosmetics","Sports","Grocery pet","Apparel",
+"Appliances", 
+"Jewelry",
+"Books",
+"Tools",
+"Medicine",
+"Office Supplies",
+"Home and decor"])
+
+    # File uploader
+uploaded_file = st.file_uploader("Upload PDF file", type=["pdf"])
+
+    # Button to trigger scoring
+if st.button("Score"):
+        if uploaded_file is not None:
+            json_file_path = r"../Nestle_Catalogue_web.json"
+            if not os.path.exists(json_file_path):
+                text_content = extract_text_from_pdf(uploaded_file)
+                print("extract text")
+                final_txt = convert_txt(text_content)
+                print("convert")
+                with open(json_file_path, "w") as json_file:
+                    json.dump(final_txt, json_file, indent=2)
+                    print(f"Data extracted and saved to '{json_file_path}'.")
+                    result = process_category(uploaded_file,json_file_path)
+                    st.write("Scoring Result:")
+                    st.write(result)
+
+            else:
+                result = process_category(uploaded_file, json_file_path)
+                st.write("Scoring Result:")
+                st.write(result)
+        else:
+            st.write("Please upload a file first")
