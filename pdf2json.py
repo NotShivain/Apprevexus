@@ -35,50 +35,55 @@ def load_json(json_path):
 
 
 #Define scoring criteria
-def common_attributes_score(product):
+def common_attributes_score(product,count):
     score = 0
-
+    avg_desc_len = len(product['description']) // count
     if "description" in product:
         score += 1
     elif "name" in product:
         score+=1
     elif "price" in product:
         score += 1
-    
+    if 40<avg_desc_len<60:
+        score+=1
+    if 30<avg_desc_len<70:
+        score+=1
+    if 20<avg_desc_len<80:
+        score+=1
     return score
 
-def score_medicine(product):
-    score = common_attributes_score(product)
+def score_medicine(product,count):
+    score = common_attributes_score(product,count)
     
     if "category" in product and product["category"].lower() == "medicine":
         score += 4
     
     return score
 
-def score_office_supplies(product):
-    score = common_attributes_score(product)
+def score_office_supplies(product,count):
+    score = common_attributes_score(product,count)
     
     if "category" in product and product["category"].lower() == "office supplies":
         score += 4
     
     return score
 
-def score_home_decor(product):
-    score = common_attributes_score(product)
+def score_home_decor(product,count):
+    score = common_attributes_score(product,count)
 
     if "category" in product and product["category"].lower() == "home decor":
         score += 4
     
     return score
 
-def score_food(product):
-    score = common_attributes_score(product)
+def score_food(product,count):
+    score = common_attributes_score(product,count)
     if "category" in product and product["category"].lower() =="food":
         score+=4
     return score
 
-def score_tool(product):
-    score = common_attributes_score(product)
+def score_tool(product,count):
+    score = common_attributes_score(product,count)
     desc_criteria=['name','model','brand','tool type','type','size','dimensions',
     'power','source','battery','manual','weight','kg','pound','heavy','light',
     'durability', "material","features", "usage","application","quality", "price", "warranty",
@@ -95,8 +100,8 @@ def score_tool(product):
             score+=1
     return score
 
-def score_jewellery(product):
-    score = common_attributes_score(product)
+def score_jewellery(product,count):
+    score = common_attributes_score(product,count)
     desc_criteria=["name","model", "brand", "material", "metal", "gemstone", "size","dimensions", "weight",
     "style", "design", "occasion", "price", "availability", "certifications","standards", 
     "customer","review","testimonials", "care","instructions", "packaging", "shipping",
@@ -111,8 +116,8 @@ def score_jewellery(product):
     
     return score
 
-def score_book(product):
-    score = common_attributes_score(product)
+def score_book(product,count):
+    score = common_attributes_score(product,count)
     desc_criteria=["title", "author", "publisher", "publication","date", "genre", "format", "language",
     "page","count", "ISBN", "summary", "reviews", "awards", "bestseller","contents","acknowledgments", "preface", "introduction",
     "plot", "characters", "setting", "themes", "style","demographic","edition",
@@ -124,8 +129,8 @@ def score_book(product):
         if word in set(product["description"].lower().split()):
             score+=1
     return score
-def score_electronics(product):
-    score=common_attributes_score(product)
+def score_electronics(product,count):
+    score=common_attributes_score(product,count)
     if "Power Consumption" in product["desription"]:
         score+=1
     if "Display Size" in product["description"]:
@@ -137,8 +142,8 @@ def score_electronics(product):
     if "Certificatoins" in product["description"]:
         score+=1
     return score
-def score_cosmetics(product):
-    score = common_attributes_score(product)
+def score_cosmetics(product,count):
+    score = common_attributes_score(product,count)
     if "Ingredients" in product["description"]:
         score += 1
     if "Type" in product["description"]:
@@ -150,8 +155,8 @@ def score_cosmetics(product):
     if "Expiry Date" in product["description"]:
         score += 1
     return score
-def score_sports(product):
-    score = common_attributes_score(product)
+def score_sports(product,count):
+    score = common_attributes_score(product,count)
     if "Sport Type" in product["description"]:
         score += 1
     if "Durability" in product["description"]:
@@ -163,8 +168,8 @@ def score_sports(product):
     if "Material" in product["description"]:
         score += 1
     return score
-def score_grocery(product):
-    score = common_attributes_score(product)
+def score_grocery(product,count):
+    score = common_attributes_score(product,count)
     if "Weight" in product["description"]:
         score +=1
     if "Price" in product["description"]:
@@ -174,8 +179,8 @@ def score_grocery(product):
     if "Packaging" in product["description"]:
         score +=1
     return score
-def  score_apparel(product):
-    score = common_attributes_score(product)
+def  score_apparel(product,count):
+    score = common_attributes_score(product,count)
     if "Size" in product["description"]:
         score +=1
     if "Color" in product["description"]:
@@ -187,8 +192,8 @@ def  score_apparel(product):
     if  "Care Instructions" in product["description"]:
         score +=1
     return score 
-def score_appliances(product):
-    score =common_attributes_score(product)
+def score_appliances(product,count):
+    score =common_attributes_score(product,count)
     if "Category" in product["description"]:
         score +=1
     if "Model Number" in product["description"]:
@@ -205,7 +210,7 @@ def score_appliances(product):
 def extract_product_info(data, category_keywords):
     products = []
     current_product = None
-
+    count=0
     for item in data:
         if item.startswith("2024"):
             if current_product:
@@ -220,46 +225,46 @@ def extract_product_info(data, category_keywords):
         else:
             if current_product:
                 current_product["description"] += item + " "
-
+                count+=1
     if current_product:
         products.append(current_product)
 
-    return products
+    return products,count
 
-def print_product_info(product, category):
+def print_product_info(product, category,count):
     if product:
-        product_score = calculate_score(product, category)
+        product_score = calculate_score(product, category,count)
         print(f"Product: {product['name']}, Category: {category}, Score: {product_score}")
 
-def calculate_score(product, category):
-    score = common_attributes_score(product)
+def calculate_score(product, category,count):
+    score = common_attributes_score(product,count)
 
     if category == "medicine":
-        score += score_medicine(product)
+        score += score_medicine(product,count)
     elif category == "office supplies":
-        score += score_office_supplies(product)
+        score += score_office_supplies(product,count)
     elif category == "home decor":
-        score += score_home_decor(product)
+        score += score_home_decor(product,count)
     elif category == "food":
-        score += score_food(product)
+        score += score_food(product,count)
     elif category == "tool":
-        score += score_tool(product)
+        score += score_tool(product,count)
     elif category == "jewellery":
-        score += score_jewellery(product)
+        score += score_jewellery(product,count)
     elif category == "book":
-        score += score_book(product)
+        score += score_book(product,count)
     elif category=="electronics":
-        score+=score_electronics(product)
+        score+=score_electronics(product,count)
     elif category=="cosmetics":
-        score+=score_cosmetics(product)
+        score+=score_cosmetics(product,count)
     elif category=="sports":
-        score+=score_sports(product)
+        score+=score_sports(product,count)
     elif category=="grocery":
-        score += score_grocery(product)
+        score += score_grocery(product,count)
     elif category=="apparels":
-        score+= score_apparel(product)
+        score+= score_apparel(product,count)
     elif category=="appliances":
-        score+=score_appliances(product)
+        score+=score_appliances(product,count)
 
 
     return score
@@ -490,10 +495,10 @@ def process_category(pdf_path, json_path):
     category = selected_category.lower
 
     if category:
-        products = extract_product_info(data, [])
+        products,count = extract_product_info(data, [])
         for product in products:
             product["category"] = category
-            print_product_info(product, category)
+            print_product_info(product, category,count)
     else:
         print("Could not detect the category.")
 
