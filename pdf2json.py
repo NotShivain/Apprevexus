@@ -79,20 +79,50 @@ def score_food(product):
 
 def score_tool(product):
     score = common_attributes_score(product)
+    desc_criteria=['name','model','brand','tool type','type','size','dimensions',
+    'power','source','battery','manual','weight','kg','pound','heavy','light',
+    'durability', "material","features", "usage","application","quality", "price", "warranty",
+    "compatibility", "safety","features", "maintenance", "accessories",
+    "certifications","standards", "reviews","testimonials", "technical","specifications",
+    "country of manufacture","country","country of origin","origin", "environmental impact", "packaging", "shipping"]
+    
     if "category" in product and product["category"].lower() =="tool":
         score+=4
+    if product["description"].length() in range(250,350):
+        score+=1
+    for word in desc_criteria:
+        if word in set(product["description"].lower().split()):
+            score+=1
     return score
 
 def score_jewellery(product):
     score = common_attributes_score(product)
+    desc_criteria=["name","model", "brand", "material", "metal", "gemstone", "size","dimensions", "weight",
+    "style", "design", "occasion", "price", "availability", "certifications","standards", 
+    "customer","review","testimonials", "care","instructions", "packaging", "shipping",
+    "type","clasp","chain", "earring","type", "ring","size", "bracelet","length", "necklace",
+     "finishing", "hallmark", "engraving", "birthstone", "diamond","clarity",
+    "cut", "color", "pearl", "customization","purity"]
     if "category" in product and product["category"].lower() =="jewellery":
         score+=4
+    for word in desc_criteria:
+        if word in set(product["description"].lower().split()):
+            score+=1
+    
     return score
 
 def score_book(product):
     score = common_attributes_score(product)
+    desc_criteria=["title", "author", "publisher", "publication","date", "genre", "format", "language",
+    "page","count", "ISBN", "summary", "reviews", "awards", "bestseller","contents","acknowledgments", "preface", "introduction",
+    "plot", "characters", "setting", "themes", "style","demographic","edition",
+    "conflict", "resolution", "climax", "symbolism", "motifs",
+    "foreshadowing", "flashbacks", "tone", "mood", "narrative","structure","cover","hardcover","paperback","art","accolades"]
     if "category" in product and product["category"].lower() =="book":
         score+=4
+    for word in desc_criteria:
+        if word in set(product["description"].lower().split()):
+            score+=1
     return score
 def score_electronics(product):
     score=common_attributes_score(product)
