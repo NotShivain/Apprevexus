@@ -139,9 +139,24 @@ def score_home_decor(product,count):
 
 def score_food(product,count):
     score = common_attributes_score(product,count)
-    if "category" in product and product["category"].lower() =="food":
+    desc_criteria=["name", "ingredients", "minerals", "nutrients", "nutritional", "drink", "beverage", "healthy", "health", 
+                     "snacks", "snack", "tasty", "sweet", "bitter", "sour", "spicy", "eat", "edible", "cooking", 
+                     "packaged", "MRP", "RRP", "price", "manufactured", "manufacturer", "processed", "packaged", 
+                     "organic", "natural", "fresh", "frozen", "canned", "preserved", "diet", "nutrition", "dietary", 
+                     "fiber", "protein", "carbohydrate", "fat", "calorie", "gluten_free", "vegetarian", "vegan", 
+                     "allergen", "intolerance", "sustainable", "local", "regional", "ethnic", "gourmet", "recipe", 
+                     "flavor", "aroma", "texture", "crunchy", "creamy", "juicy", "sauce", "condiment", "spices", 
+                     "seasoning", "herbs", "vegetable", "fruit", "grain", "rice", "pasta", "bread", "dairy", "cheese", 
+                     "milk", "yogurt", "meat", "poultry", "seafood", "fish", "shellfish","chicken","veg","non","kids","milky","stick","cup","cone","chocolate","cookies","choco","finger","smooth","Units","kg","g","weight","cold","dry","hot"]
+    if "category" in product and product["category"].lower() =="grocery":
         score+=4
-    return score
+    for word in desc_criteria:
+        if word in set(product["description"].lower().split()):
+            score+=1
+    
+    total = len(desc_criteria)+10
+    final = scale(total,score)
+    return final
 
 def score_tool(product,count):
     score = common_attributes_score(product,count)
@@ -370,6 +385,8 @@ def calculate_score(product, category,count):
         score+=score_cosmetics(product,count)
     elif category=="sports":
         score+=score_sports(product,count)
+    elif category=="food":
+        score+=score_food(product,count)
     elif category=="grocery":
         score += score_grocery(product,count)
     elif category=="apparels":
@@ -468,6 +485,7 @@ selected_category = st.selectbox("Select Category", ["Electronics","Cosmetics","
 "Appliances", 
 "Jewelry",
 "Books",
+"Food",
 "Tools",
 "Medicine",
 "Office Supplies",
