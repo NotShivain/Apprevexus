@@ -4,6 +4,8 @@ import string
 import re
 import os
 import streamlit as st
+import seaborn as sns
+import plotly.express as px
 # Convert pdf to string
 
 def set_background_image():
@@ -56,10 +58,12 @@ def common_attributes_score(product,count):
     avg_desc_len = len(product['description']) // count
     if "description" in product:
         score += 1
-    elif "name" in product:
+    if "name" in product:
         score+=1
-    elif "price" in product:
+    if "price" in product:
         score += 1
+    if "manufactered" or "company" or "manufacturer" in product:
+        score+= 1
     if 40<avg_desc_len<60:
         score+=1
     if 30<avg_desc_len<70:
@@ -67,6 +71,10 @@ def common_attributes_score(product,count):
     if 20<avg_desc_len<80:
         score+=1
     return score
+
+def scale(total, score):
+     value = (score/total)*10
+     return round(value,2)
 
 def score_medicine(product,count):
     score = common_attributes_score(product,count)
@@ -82,7 +90,9 @@ def score_medicine(product,count):
     for word in desc_criteria:
         if word in set(product["description"].lower().split()):
             score+=1
-    return score
+    total = len(desc_criteria)+10
+    final = scale(total,score)
+    return final
 
 def score_office_supplies(product,count):
     score = common_attributes_score(product,count)
@@ -98,7 +108,9 @@ def score_office_supplies(product,count):
     for word in desc_criteria:
         if word in set(product["description"].lower().split()):
             score+=1
-    return score
+    total = len(desc_criteria)+10
+    final = scale(total,score)
+    return final
 
 def score_home_decor(product,count):
     score = common_attributes_score(product,count)
@@ -115,7 +127,9 @@ def score_home_decor(product,count):
     for word in desc_criteria:
         if word in set(product["description"].lower().split()):
             score+=1
-    return score
+    total = len(desc_criteria)+10
+    final = scale(total,score)
+    return final
 
 def score_food(product,count):
     score = common_attributes_score(product,count)
@@ -139,7 +153,9 @@ def score_tool(product,count):
     for word in desc_criteria:
         if word in set(product["description"].lower().split()):
             score+=1
-    return score
+    total = len(desc_criteria)+10
+    final = scale(total,score)
+    return final
 
 def score_jewellery(product,count):
     score = common_attributes_score(product,count)
@@ -155,7 +171,9 @@ def score_jewellery(product,count):
         if word in set(product["description"].lower().split()):
             score+=1
     
-    return score
+    total = len(desc_criteria)+10
+    final = scale(total,score)
+    return final
 
 def score_book(product,count):
     score = common_attributes_score(product,count)
@@ -169,7 +187,9 @@ def score_book(product,count):
     for word in desc_criteria:
         if word in set(product["description"].lower().split()):
             score+=1
-    return score
+    total = len(desc_criteria)+10
+    final = scale(total,score)
+    return final
 def score_electronics(product,count):
     score=common_attributes_score(product,count)
     desc_criteria = ["name", "model", "brand", "type", "color", "material", "dimensions", "weight",
@@ -186,7 +206,9 @@ def score_electronics(product,count):
     for word in desc_criteria:
         if word in set(product["description"].lower().split()):
             score+=1
-    return score
+    total = len(desc_criteria)+10
+    final = scale(total,score)
+    return final
 def score_cosmetics(product,count):
     
     score = common_attributes_score(product,count)
@@ -206,7 +228,9 @@ def score_cosmetics(product,count):
     for word in desc_criteria:
         if word in set(product["description"].lower().split()):
             score+=1
-    return score
+    total = len(desc_criteria)+10
+    final = scale(total,score)
+    return final
 def score_sports(product,count):
     score = common_attributes_score(product,count)
     desc_criteria = ["name", "brand", "type", "sport", "color", "size", "material", "weight",
@@ -229,7 +253,9 @@ def score_sports(product,count):
     for word in desc_criteria:
         if word in set(product["description"].lower().split()):
             score+=1
-    return score
+    total = len(desc_criteria)+10
+    final = scale(total,score)
+    return final
 
 
 def score_grocery(product,count):
@@ -251,7 +277,9 @@ def score_grocery(product,count):
         if word in set(product["description"].lower().split()):
             score+=1
     
-    return score
+    total = len(desc_criteria)+10
+    final = scale(total,score)
+    return final
 def  score_apparel(product,count):
     score = common_attributes_score(product,count)
     if "Size" in product["description"]:
@@ -319,23 +347,9 @@ def extract_product_info(data):
     count = 0
     for item in data:
         current_product = {"category": "", "name": item, "description": "", "price": ""}
-        if any(keyword.lower() in item.lower() for keyword in [
-    "product", "price", "brand", "quality", "best", "new", "design", "style", 
-    "color", "size", "features", "performance", "technology", "trendy", "fashion", 
-    "popular", "comfortable", "durable", "convenient", "functional", "versatile", 
-    "modern", "innovative", "luxury", "affordable", "taste", "flavor", "fresh", 
-    "organic", "natural", "healthy", "nutritious", "energy", "fitness", "exercise", 
-    "workout", "training", "athlete", "sport", "active", "team", "game", "competition", 
-    "win", "champion", "victory", "match", "event", "outdoor", "indoor", "equipment", 
-    "accessories", "gadget", "device", "smart", "wireless", "portable", "battery", 
-    "charger", "screen", "display", "camera", "sound", "music", "entertainment", 
-    "movie", "video", "book", "reading", "author", "fiction", "non-fiction", 
-    "genre", "story", "plot", "character", "tools", "DIY", "repair", "maintenance", 
-    "craft", "project", "hardware", "software", "office", "stationery", "desk", 
-    "organizer", "decor", "furniture", "style", "theme", "interior", "decoration","milky","bar","RRP"
-]):
-            current_product["category"] = item.strip()
-        elif item.startswith("RRP") or "price" in item.lower():
+        
+        current_product["category"] = item.strip()
+        if item.startswith("RRP") or "price" in item.lower():
             match = re.search(r'\d+', item)
             if match:
                 current_product["price"] = match.group()
@@ -373,8 +387,8 @@ def process_category(pdf_path, json_path, selected_category):
         return scoring_results
     else:
         return "Could not detect the category."
-
-st.markdown("<h1 style='text-align: center; color: white;'>Catalogue Score Calculator </h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center;'>Apprevexus</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center;'>Catalogue Score Calculator </h1>", unsafe_allow_html=True)
 with st.expander("Team Apprevexus"):
         st.info("""Kshitiz, Parth, Kartik, Shivain""")
 
