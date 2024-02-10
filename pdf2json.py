@@ -313,7 +313,9 @@ def  score_apparel(product,count):
         for word in desc_criteria:
             if word in set(product["description"].lower().split()):
                 score+=1
-    return score 
+    total = len(desc_criteria)+10
+    final = scale(total,score)
+    return final
 def score_appliances(product,count):
     score =common_attributes_score(product,count)
     desc_criteria=["name","Refrigerator", "Freezer", "Oven", "Microwave", "Stove", "Cooktop", "Range", "Dishwasher", "Washer", 
@@ -335,7 +337,9 @@ def score_appliances(product,count):
         for word in desc_criteria:
             if word in set(product["description"].lower().split()):
                 score+=1
-    return score
+    total = len(desc_criteria)+10
+    final = scale(total,score)
+    return final
 
 def calculate_score(product, category,count):
     score = common_attributes_score(product,count)
