@@ -192,15 +192,27 @@ def score_book(product,count):
     return final
 def score_electronics(product,count):
     score=common_attributes_score(product,count)
-    desc_criteria = ["name", "model", "brand", "type", "color", "material", "dimensions", "weight",
+    desc_criteria = ["name", "model", "brand", "type", "color", "material", "dimensions", "weight","screen",
     "screen size", "resolution", "processor", "RAM", "storage", "operating system",
-    "battery capacity", "camera", "connectivity", "ports", "features", "compatibility",
+    "battery", "capacity", "camera", "connectivity", "ports", "features", "compatibility",
     "warranty", "price", "availability", "ratings", "packaging", "shipping", "accessories",
-    "certifications", "sensors", "input/output", "resolution", "display type", "audio",
-    "processor speed", "graphics", "memory type", "network", "security features", 
-    "accessibility", "power consumption", "environmental rating", "dimensions", "weight",
-    "country of origin", "user manual", "software", "upgradability", "ergonomics", 
-    "regulatory compliance"]
+    "certifications", "sensors", "input","output","input/output", "resolution", "display", "type", "audio",
+    "processor speed", "graphics", "memory type", "network", 
+    "accessibility", "power","consumption", "dimensions", "weight",
+    "country of origin", "user manual", "software", "upgradability", "ergonomics","circuits" 
+    "regulatory"," compliance"
+    "Television", "TV", "Smartphone", "Phone", "Cellphone", "Mobile", "Computer", "Laptop", "Desktop", 
+    "Tablet", "iPad", "Camera", "Digital camera", "DSLR", "Mirrorless camera", "Video camera", "Camcorder", 
+    "Audio", "Speaker", "Headphones", "Earbuds", "Earphones", "Microphone", "Gaming", "Console", "PlayStation", 
+    "Xbox", "Controller", "Remote", "Smartwatch", "Wearable", "Drone", 
+    "Quadcopter", "Smart home", "Router", "Modem", "Printer", "Scanner", "Projector", "Monitor", "Display", 
+    "Keyboard", "Mouse", "Mousepad", "Graphics card", "Processor", "CPU", "RAM", "Memory", "Hard drive", 
+    "Solid state drive", "SSD", "Storage", "Battery", "Charger", "Adapter", "Dock", "Cable", "Wireless", 
+    "Bluetooth", "Wi-Fi", "Internet", "Network", "Ethernet", "Fiber", "optic", "HDMI", "USB", "Thunderbolt", 
+    "VGA", "DVI", "DisplayPort", "SD","card", "MicroSD", "Podcast", "E-book", "Kindle", "Nook", "Tablet", "App", "Software", "Operating system", 
+    "iOS", "Android", "Windows", "MacOS", "Linux", "Virtual"," reality", "Augmented" "microchips", "AR", "VR"
+]
+
     if "category" in product and product["category"].lower()=="electronics":
         score+=4
     for word in desc_criteria:
@@ -282,29 +294,47 @@ def score_grocery(product,count):
     return final
 def  score_apparel(product,count):
     score = common_attributes_score(product,count)
-    if "Size" in product["description"]:
-        score +=1
-    if "Color" in product["description"]:
-        score +=1
-    if "Material" in product["description"]:
-        score +=1
-    if "Price" in product["description"]:
-        score +=1
-    if  "Care Instructions" in product["description"]:
-        score +=1
+    desc_criteria =["name","price","manufactured","Color", "Material", "Style", "Fit", "Pattern", "Length", "Neckline", 
+                    "Sleeve length", "Details", "Occasion", "Brand", "Size range", "Seasonality", "Trendiness","collar"
+    "Shirt", "T-shirt", "Top", "Pants", "Jeans", "Shorts", "Skirt", "Dress", "Jacket", "Coat", "Sweater", 
+    "Hoodie", "Blazer", "Suit", "Vest", "Tunic", "Cardigan", "Kimono", "Romper", "Leggings", "Tights", 
+    "Trousers", "Parka", "Anorak", "Raincoat", "Windbreaker", "Poncho", "Cape", "Swimsuit", "Bikini", 
+    "Tankini", "Monokini", "Cover-up", "Sarong", "Robe", "Nightgown", "Pajamas", "Underwear", "Lingerie", 
+    "Brassiere", "Bralette", "Panties", "Boxers", "Briefs", "Thong", "Bodysuit", "Camisole", "Corset", 
+    "Garter", "Stockings", "Socks", "Tights", "Hosiery", "Slip", "Shapewear", "Athleisure", "Activewear", 
+    "Swimwear", "Beachwear", "Loungewear", "Sleepwear", "Uniform", "Costume", "Outfit", "Attire", "Wear", "Denim", "Cotton", "Wool", "Leather", "Silk",
+      "Linen", "Polyester", "Rayon", "Spandex", "Velvet",
+    "Fleece", "Chiffon", "Satin", "Knit", "Cashmere", "Acrylic", "Flannel", "Twill", "Canvas", "Terry",
+    "Corduroy", "Fur", "Suede", "Synthetic", "Microfiber", "Nylon", "Shearling", "Taffeta", "Tulle", "Lace",
+    "Organza", "Brocade", "Mesh", "Gingham", "Seersucker", "Chambray", "Poplin", "Muslin", "Jacquard",
+    "Batiste", "Georgette", "Voile", "Dupioni", "Damask", "Tweed", "Chenille", "Bouclé", "Crepe"]
+    if "category" in product and product["category"].lower()=="apparel":
+        score+=4
+        for word in desc_criteria:
+            if word in set(product["description"].lower().split()):
+                score+=1
     return score 
 def score_appliances(product,count):
     score =common_attributes_score(product,count)
-    if "Category" in product["description"]:
-        score +=1
-    if "Model Number" in product["description"]:
-        score +=1
-    if "Power Consumption" in product["description"]:
-        score +=1
-    if "Warranty" in product["description"]:
-        score +=1
-    if "User Manual" in product["description"]:
-        score +=1
+    desc_criteria=["name","Refrigerator", "Freezer", "Oven", "Microwave", "Stove", "Cooktop", "Range", "Dishwasher", "Washer", 
+    "Dryer", "Vacuum", "Blender", "Toaster", "Coffee", "Kettle", "Mixer", "Juicer", 
+    "Cooker", "Purifier", "Humidifier", "Heater", "Fan", "Sewing", "Iron", "Disposal", 
+    "Dispenser", "Purifier", "Cooler", "Fridge", "Cleaner", "Washer", "Timer", "Strip", "Protector", 
+    "Cord", "Adapter", "Converter", "Thermostat", "Detector", "Extinguisher", "Blanket", "Kit",
+    "Grill", "Fryer", "Steamer", "Dehydrator", "Purifier", "Sewing", "Disposal", "Heater", "Fan", 
+    "Conditioner", "Cooler", "Cleaner", "Vacuum", "Extractor", "Chopper", "Fuser", "Dispenser", "Polisher", 
+    "Sweeper", "Mop", "Washer", "Filter", "Timer", "Adapter", "Converter", "Thermostat", "Detector", 
+    "Extinguisher", "Blanket", "Kit", "Slicer", "Extractor", "Grinder", "Squeezer", "Press", "Extractor", 
+    "Steamer", "Sterilizer", "Deodorizer", "Airpot", "Roaster", "Extractor", "Sterilizer", "Warmer", "Holder", 
+    "Organizer", "Masher", "Chopper", "Extractor", "Press", "Processor", "Container", "Packer", "Dispenser", 
+    "Organizer", "Holder", "Organizer", "Organizer", "Charger", "Controller", "Inverter", "Regulator", 
+    "Adapter", "Converter", "Converter", "Detector", "Alert", "Siren", "Alarm", "Beacon", "Lamp", "Bulb", 
+    "Light", "Flashlight", "Torch", "Lantern", "Glow", "Glimmer", "Radiance", "Light", "Lamp"]
+    if "category" in product and product["category"].lower()=="appliances":
+        score+=4
+        for word in desc_criteria:
+            if word in set(product["description"].lower().split()):
+                score+=1
     return score
 
 def calculate_score(product, category,count):
