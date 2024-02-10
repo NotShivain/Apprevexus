@@ -8,20 +8,26 @@ import seaborn as sns
 import plotly.express as px
 # Convert pdf to string
 
-def set_background_image():
-    # Use HTML to set background image
+def set_bg_hack_url():
+    '''
+    A function to unpack an image from url and set as bg.
+    Returns
+    -------
+    The background.
+    '''
+        
     st.markdown(
-        f"""
+         f"""
          <style>
          .stApp {{
-             background-image: url(""https://wallpapersmug.com/large/c066e0/blue-abstract-wave-flow-minimalist.jpg"");
-             background-attachment: fixed;
+             background: url("https://static.vecteezy.com/system/resources/previews/006/915/132/non_2x/minimalist-style-hand-painted-liquid-background-free-vector.jpg");
              background-size: cover
          }}
          </style>
          """,
          unsafe_allow_html=True
-    )
+     )
+set_bg_hack_url()
 
 def extract_text_from_pdf(pdf_path):
     with pdfplumber.open(pdf_path) as pdf:
@@ -399,7 +405,17 @@ def extract_product_info(data):
 def print_product_info(product, category, count):
     if product:
         product_score = calculate_score(product, category, count)
-        return f"Category: {category}, Score: {product_score}"
+        if product_score < 4:
+            label = "Very Poor"
+            color = "red"
+        elif 4 <= product_score < 7:
+            label = "Average"
+            color = "yellow"
+        else:
+            label = "Excellent"
+            color = "green"
+
+        return category, product_score, label, color
 
 
 def process_category(pdf_path, json_path, selected_category):
@@ -423,11 +439,25 @@ def process_category(pdf_path, json_path, selected_category):
         return "Could not detect the category."
 st.markdown("<h1 style='text-align: center;'>Apprevexus</h1>", unsafe_allow_html=True)
 st.markdown("<h1 style='text-align: center;'>Catalogue Score Calculator </h1>", unsafe_allow_html=True)
-with st.expander("Team Apprevexus"):
-        st.info("""Kshitiz, Parth, Kartik, Shivain""")
 
-#image_path = "https://static.vecteezy.com/system/resources/thumbnails/007/852/290/small/modern-wave-background-with-a-geometric-line-pattern-overlay-minimalist-smooth-curve-shapes-illustration-design-vector.jpg"
-set_background_image()
+
+with st.sidebar:
+    with st.expander("Team Apprevexus"):
+        st.info("Shivain")
+        st.info("Kshitiz")
+        st.info("Parth")
+        st.info("Kartik")
+    with st.expander("NOTE"):
+        st.info("Please ensure that the appropriate category is selected for your catalogue to accurately determine the score. Failure to do so may result in an inaccurate display of the score.")
+    st.title("Tips for an Excellent Score")
+    st.write("- Ensure accurate product descriptions.")
+    st.write("- Provide proper price details.")
+    st.write("- Ensure that proper manufacturer details are given in the catalogue.")
+    st.write("- Word limit should be kept in mind (30 to 50 words).")
+    st.write("- Ensure proper branding information.")
+        
+
+
 
 def save_to_json(data, json_path):
     with open(json_path, 'w') as json_file:
@@ -442,6 +472,7 @@ selected_category = st.selectbox("Select Category", ["Electronics","Cosmetics","
 "Medicine",
 "Office Supplies",
 "Home and decor"])
+
 
     # File uploader
 uploaded_file = st.file_uploader("Upload PDF file", type=["pdf"])
@@ -466,14 +497,22 @@ if uploaded_file is not None:
         if os.path.exists(json_file_path):
             if st.button("Score"):
                 result = process_category(uploaded_file, json_file_path, selected_category)
-                print(result)
-                st.write("Scoring Result:")
-                for res in result:
-                    st.write(res)
+                
+                st.subheader("Scoring Results:")
+                for category, product_score, label, color in result:
+                    st.write(f"<h3 style='text-align: center;font-size: 24px'>Category: {category}</h3>", unsafe_allow_html=True)
+                    st.write(f"<p style='text-align: center;font-size: 24px'>Score: {product_score}</p>", unsafe_allow_html=True)
+                    st.write(f"<p style='text-align: center;font-size: 24px'>Rating: {label}</p>", unsafe_allow_html=True)
 
+
+            
+            # Progress bar
+                    progress_bar = st.progress(product_score / 10.0)
+                    
         else:
             st.write("Please convert to json first")
                 
 else:
     st.write("Please upload a file first")
+
 
