@@ -33,7 +33,7 @@ def set_bg_hack_url():
          f"""
          <style>
          .stApp {{
-             background: url("https://static.vecteezy.com/system/resources/previews/006/915/132/non_2x/minimalist-style-hand-painted-liquid-background-free-vector.jpg");
+             background: url("https://4kwallpapers.com/images/wallpapers/texture-dark-background-purple-3840x2715-3086.jpg");
              background-size: cover
          }}
          </style>
