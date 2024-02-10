@@ -172,43 +172,66 @@ def score_book(product,count):
     return score
 def score_electronics(product,count):
     score=common_attributes_score(product,count)
-    if "Power Consumption" in product["desription"]:
-        score+=1
-    if "Display Size" in product["description"]:
-        score+=1
-    if "Operating System" in product["description"]:
-        score+=1
-    if "Warranty" in product["description"]:
-        score+=1
-    if "Certificatoins" in product["description"]:
-        score+=1
+    desc_criteria = ["name", "model", "brand", "type", "color", "material", "dimensions", "weight",
+    "screen size", "resolution", "processor", "RAM", "storage", "operating system",
+    "battery capacity", "camera", "connectivity", "ports", "features", "compatibility",
+    "warranty", "price", "availability", "ratings", "packaging", "shipping", "accessories",
+    "certifications", "sensors", "input/output", "resolution", "display type", "audio",
+    "processor speed", "graphics", "memory type", "network", "security features", 
+    "accessibility", "power consumption", "environmental rating", "dimensions", "weight",
+    "country of origin", "user manual", "software", "upgradability", "ergonomics", 
+    "regulatory compliance"]
+    if "category" in product and product["category"].lower()=="electronics":
+        score+=4
+    for word in desc_criteria:
+        if word in set(product["description"].lower().split()):
+            score+=1
     return score
 def score_cosmetics(product,count):
+    
     score = common_attributes_score(product,count)
-    if "Ingredients" in product["description"]:
-        score += 1
-    if "Type" in product["description"]:
-        score += 1
-    if "Usage" in product["description"]:
-        score += 1
-    if "Skin Type" in product["description"]:
-        score += 1
-    if "Expiry Date" in product["description"]:
-        score += 1
+    desc_criteria = ["name", "brand", "type", "color", "size", "shade", "formulation", "skin type",
+    "skin concern", "coverage", "finish", "ingredients", "usage", "benefits", 
+    "application", "scent", "packaging", "expiry date", "price", "availability",
+    "ratings", "reviews", "certifications", "sustainability", "cruelty-free",
+    "vegan", "dermatologist tested", "allergen information", "sensitivity",
+    "patch test", "how to use", "directions", "warnings", "storage", 
+    "country of origin", "user manual", "recommended age", "expiration date",
+    "hypoallergenic", "non-comedogenic", "paraben-free", "sulfate-free",
+    "phthalate-free", "gluten-free", "oil-free", "alcohol-free", "fragrance-free",
+    "preservative-free", "silicone-free", "mineral oil-free", "dye-free",
+    "artificial color-free", "oxybenzone-free", "water-resistant", "long-lasting"]
+    if "category" in product and product["category"].lower() =="cosmetics":
+        score+=4
+    for word in desc_criteria:
+        if word in set(product["description"].lower().split()):
+            score+=1
     return score
 def score_sports(product,count):
     score = common_attributes_score(product,count)
-    if "Sport Type" in product["description"]:
-        score += 1
-    if "Durability" in product["description"]:
-        score += 1
-    if "Size" in product["description"]:
-        score += 1
-    if "Weight" in product["description"]:
-        score += 1
-    if "Material" in product["description"]:
-        score += 1
+    desc_criteria = ["name", "brand", "type", "sport", "color", "size", "material", "weight",
+    "dimensions", "capacity", "fit", "closure", "sole", "upper material",
+    "lining material", "design", "style", "technology", "features", 
+    "durability", "comfort", "breathability", "flexibility", "traction",
+    "support", "cushioning", "waterproof", "windproof", "thermal",
+    "reflective", "UV protection", "pockets", "straps", "handles",
+    "adjustability", "grip", "resistance", "performance", "maintenance",
+    "assembly", "installation", "usage", "care", "instructions",
+    "warnings", "safety", "certifications", "standards", "warranty",
+    "price", "availability", "ratings", "reviews", "shipping",
+    "packaging", "country of origin", "user manual", "recommended age",
+    "suitable for", "level", "experience", "training", "competition",
+    "recreation", "indoor", "outdoor", "terrain", "climate",
+    "environment", "location", "season", "event", "league",
+    "team", "player", "position", "activity", "exercise"]
+    if "category" in product and product["category"].lower() =="sports":
+        score+=4
+    for word in desc_criteria:
+        if word in set(product["description"].lower().split()):
+            score+=1
     return score
+
+
 def score_grocery(product,count):
     score = common_attributes_score(product,count)
     desc_criteria=["name","product","top","tasty","useful","healthy","milk","chocolate","snacks","pet","cook","eat","home","kitchen","price","safe","RRP","weight","grocery", "supermarket", "food", "produce", "fruit", "vegetable", "grains", 
