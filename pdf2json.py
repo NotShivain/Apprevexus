@@ -505,7 +505,7 @@ def process_category(pdf_path, json_path):
 st.title("Catalogue Scoring App")
 
     # Spinner for selecting categories
-selected_category = st.selectbox("Select Category", ["Electronics","Cosmetics","Sports","Grocery","Pet","Apparel",
+selected_category = st.selectbox("Select Category", ["Electronics","Cosmetics","Sports","Grocery Pet","Apparel",
 "Appliances", 
 "Jewelry",
 "Books",
