@@ -5,7 +5,22 @@ import re
 import os
 import streamlit as st
 # Convert pdf to string
+custom_styles = """
+    <style>
+        /* Change text color */
+        body {
+            color: #333333; /* Change to your desired text color */
+        }
 
+        /* Change secondary background color */
+        .st-df {
+            background-color: #f2f2f2; /* Change to your desired secondary background color */
+        }
+    </style>
+"""
+
+# Inject custom styles into the app
+st.markdown(custom_styles, unsafe_allow_html=True)
 def set_bg_hack_url():
     '''
     A function to unpack an image from url and set as bg.
