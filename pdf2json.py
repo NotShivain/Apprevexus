@@ -172,6 +172,7 @@ def score_electronics(product,count):
             score+=1
     return score
 def score_cosmetics(product,count):
+    
     score = common_attributes_score(product,count)
     desc_criteria = ["name", "brand", "type", "color", "size", "shade", "formulation", "skin type",
     "skin concern", "coverage", "finish", "ingredients", "usage", "benefits", 
