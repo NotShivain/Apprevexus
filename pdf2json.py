@@ -5,6 +5,22 @@ import re
 import os
 import streamlit as st
 # Convert pdf to string
+
+def set_background_image():
+    # Use HTML to set background image
+    st.markdown(
+        f"""
+         <style>
+         .stApp {{
+             background-image: url(""https://wallpapersmug.com/large/c066e0/blue-abstract-wave-flow-minimalist.jpg"");
+             background-attachment: fixed;
+             background-size: cover
+         }}
+         </style>
+         """,
+         unsafe_allow_html=True
+    )
+
 def extract_text_from_pdf(pdf_path):
     with pdfplumber.open(pdf_path) as pdf:
         text_content = ""
@@ -335,7 +351,12 @@ def process_category(pdf_path, json_path, selected_category):
     else:
         return "Could not detect the category."
 
-st.title("Catalogue Scoring App")
+st.markdown("<h1 style='text-align: center; color: white;'>Catalogue Score Calculator </h1>", unsafe_allow_html=True)
+with st.expander("Team Apprevexus"):
+        st.info("""Kshitiz, Parth, Kartik, Shivain""")
+
+#image_path = "https://static.vecteezy.com/system/resources/thumbnails/007/852/290/small/modern-wave-background-with-a-geometric-line-pattern-overlay-minimalist-smooth-curve-shapes-illustration-design-vector.jpg"
+set_background_image()
 
 def save_to_json(data, json_path):
     with open(json_path, 'w') as json_file:
@@ -384,3 +405,4 @@ if uploaded_file is not None:
                 
 else:
     st.write("Please upload a file first")
+
